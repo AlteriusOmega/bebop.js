@@ -186,3 +186,7 @@ function BEBOPOBJ(input) {
 
 return (newMelody.noteNames);  
 }
+function testRun(){
+  var testChord = 'CMaj7';
+  BEBOPOBJ(testChord);
+}
