@@ -50,7 +50,7 @@ function BEBOPOBJ(input) {
 }
   
   //call invertNotes on allNotes
-  const intNotes = invertNotes(allNotes);
+  const intNotes = invertNotes(allNotes); /* ? */
   
   const allKeys = {
     'sharps': ['F#', 'B', 'E', 'A', 'D', 'G', 'C', 'C#', 'D#', 'G#', 'A#'],
@@ -61,7 +61,7 @@ function BEBOPOBJ(input) {
  function getNoteNames (arrIntNotes,sharpsOrFlats){
       var names = [];
       for(var note in arrIntNotes){
-        names.push(allNotes[sharpsOrFlats][arrIntNotes[note]]);
+        names.push(allNotes[sharpsOrFlats][ bindNote( arrIntNotes[note] ) ]);
       }
       return names;
     } 
@@ -173,10 +173,31 @@ function BEBOPOBJ(input) {
         return aboveBelowNotes;
       });
     }() );//IIFE
-    self.surround3 = function(){
-    }
-    self.surround4 = function(){
-    }
+    self.surround3 = (function(){
+    	var surround3Notes = [];
+    	self.tones.forEach(function(tone, index){
+    		surround3Notes.push(self.aboveNote(tone) );
+    		surround3Notes.push(self.belowNote(tone) );
+    		surround3Notes.push(tone);
+    	});
+    		return (surround3Notes);
+    } () );//IIFE
+    self.surround4 = (function(){
+    	 var surround4Notes = [];
+    	self.tones.forEach(function(tone,index){
+           surround4Notes.push(self.aboveNote(tone) );    		
+	    			if( ( self.aboveNote(tone) - tone ) > 1 ) {
+	    				surround4Notes.push(tone+1);
+	    				surround4Notes.push(tone-1);  
+	    			}
+	    			else{
+	    				surround4Notes.push(tone-2);
+	    				surround4Notes.push(tone-1);
+	    			}
+		surround4Notes.push(tone); 
+    	})
+      return (surround4Notes);
+    }());//IIFE
     self.noteNames = getNoteNames(self.approachAbove, self.chord.sharpOrFlat);
   }
 
@@ -184,6 +205,47 @@ function BEBOPOBJ(input) {
   
   var newMelody = new melody(newChord,'up','8th',1);
 
+ const synth = new Tone.Synth();
+
+ // play sounds of output
+
+ synth.oscillator.type = 'sawtooth';
+const gain = new Tone.Gain(0.9);
+gain.toMaster();
+synth.connect(gain);
+
+// synth.triggerAttackRelease('C5','8n')
+
+var soundNotes = (function(){
+  var outNotes = [];
+  for (var note in newMelody.noteNames ){
+outNotes.push(newMelody.noteNames[note] +'3');
+  }
+  return outNotes;
+}());
+
+var index = 0;
+
+Tone.Transport.scheduleRepeat(time => {
+	repeat(time);
+}, '8n');
+
+Tone.Transport.bpm.value = 90;
+
+function repeat(time){
+	var note = soundNotes[index % soundNotes.length];
+	synth.triggerAttackRelease(note, '8n', time);
+	index++;
+}
+
+Tone.Transport.start();
+
+setTimeout( ()=> {
+  Tone.Transport.stop();
+},5000)
+console.log ('reached the end of script');
+
+// debugger;
 return (newMelody.noteNames);  
 }
 function testRun(){

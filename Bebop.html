@@ -1,12 +1,28 @@
 <HTML>
 
 <head>
-
+<title>Bebop!</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<style>
+body {
+    background-image: linear-gradient(darkslateblue, rgb(255, 0, 200));
+    color:rgb(100, 192, 223); 
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+h1 {text-align: center;}
+</style>
 
 </head>
 
 <body>
+
+<h1>Welcome to the bebop lick generator!</h1>
+
+Type a jazz chord into the form below and click "Get Bebop!" <br><br>
+Ex: "EbMaj7" and "D# Major 7th" will both produce the same notes but the first will show the accidentals as flats<br>
+and the second will show them as sharps.<br>
+The generator currently supports: major 7ths, minor 7ths, dominant 7ths, half-diminished 7ths, minor-major 7ths, augmented triads, and major triads.
 
 <form>
 <input name="bebop  input" type="text" id="bebopIn">
@@ -17,7 +33,10 @@
 <p id="output">
 </p>
 
-<script type="text/javascript" src="file:///C:/Users/schaney/Documents/Bebop/bebop.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/13.3.11/Tone.js"></script>
+<script type="text/javascript" src="bebop.js"></script>
+
+
 
 </body>
 
