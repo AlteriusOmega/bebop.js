@@ -49,8 +49,7 @@ function BEBOPOBJ(CHORD, KEY, STYLE, DIRECTION) {
   const baseSemitone = 2**(1/12);
   if(arguments.length<4){return('Please fill out all input fields');}
  let chordIn = CHORD ? CHORD.toLowerCase().replace(/ /g, '') : false;
- if(validRoots.match(chordIn[0])){}
- else{chordIn=false;}
+ if(chordIn[0]!='a'&chordIn[0]!='b'&chordIn[0]!='c'&chordIn[0]!='d'&chordIn[0]!='e'&chordIn[0]!='f'&chordIn[0]!='g'){chordIn=false;}
  if(chordIn == false ){return('Please input a valid chord!')}
 
   let keyIn = KEY? KEY.toLowerCase().replace(/ /g, '') : false;
@@ -75,6 +74,9 @@ function BEBOPOBJ(CHORD, KEY, STYLE, DIRECTION) {
     'minmaj7':{'names': ['minmaj','-maj','minor-major','minormajor'], 'tones':[0,3,7,11], 'scale':'melodic minor'},
     'maj7':{'names':['maj'], 'tones': [0,4,7,11],'scale': 'major'},
     'dim7':{'names':['dim','diminished','fully'],'tones':[0,3,6,9], 'scale':'w diminished'},
+    'sus2':{'names':['sus2','suspended2'],'tones':[0,2,7],'scale':'major'},
+    'sus4':{'names':['sus4','suspended4'],'tones':[0,5,7],'scale':'major'},
+    'sus7':{'names':['sus','suspended'],'tones':[0,2,5,7,10],'scale':'mixolydian'},
     'min7': {'names':['min','-','m'], 'tones':[0,3,7,10], 'scale':'minor'},
     'dom7':{'names':['dom','7'], 'tones':[0,4,7,10], 'scale':'mixolydian'},
     'maj':{'names':['', ' '], 'tones':[0,4,7], 'scale':'major'}//just a major triad in case there is no quality in input ex "Gb" will use Gb major triad MUST BE AT BOTTOM OF LIST
