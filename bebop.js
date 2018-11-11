@@ -19,6 +19,8 @@ const gain = new Tone.Gain(0.9);
 gain.toMaster();
 synth.connect(gain);
 
+Tone.Transport.bpm.value = 90;
+Tone.Transport.swing = 0.5;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// Get Input From HTML Page Forms ///////////////////////////////////
@@ -26,13 +28,12 @@ synth.connect(gain);
 $(".target" ).hide();
 
 $('button#runBebop').click(function(event){
+event.preventDefault();
 let chordFromHtml =  $('input#bebopIn').val() ;
 let keyFromHtml = $('input#keyIn').val();
 let styleFromHtml = $('input[name=style]:checked').val();
 let directionFromHtml = $('input[name=direction]:checked').val();
-event.preventDefault();
 $('h1#output').html(BEBOPOBJ(chordFromHtml, keyFromHtml, styleFromHtml, directionFromHtml));
-// soundNotes=null;
 } );
 
 ////////////////////////////////////// Main Function ////////////////////////////////////////////// 
@@ -41,14 +42,16 @@ function BEBOPOBJ(CHORD, KEY, STYLE, DIRECTION) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////// Define Constants and glbal functions ///////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-
+  const validRoots = 'abcdefg'; //use to check if root is valid
   const oct = 12; //number of half steps in an octave, used with % to do round-robin over all notes
   //Check if all inputs arguments are received 
   const baseHz = 261.625565;// This is the Hz value of C4 (middle C), which is represented by 0 in allNotes
   const baseSemitone = 2**(1/12);
   if(arguments.length<4){return('Please fill out all input fields');}
  let chordIn = CHORD ? CHORD.toLowerCase().replace(/ /g, '') : false;
- if(CHORD == false ){return('Please input a chord!')}
+ if(validRoots.match(chordIn[0])){}
+ else{chordIn=false;}
+ if(chordIn == false ){return('Please input a valid chord!')}
 
   let keyIn = KEY? KEY.toLowerCase().replace(/ /g, '') : false;
   let styleIn = STYLE? STYLE.toLowerCase().replace(/ /g, '') : false;
@@ -361,51 +364,41 @@ function BEBOPOBJ(CHORD, KEY, STYLE, DIRECTION) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////// Get notes for audio and play using Tone Transport //////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-let soundNotes = (function(){
-  let outNotes = [];
-  outNotes[0]=1000000000;
-  outputMelody.forEach(function(note, index){
-    outNotes.push(getHz(note));
-  })
-  return outNotes;
+let soundNotes = 0;
+soundNotes = (function(){
+let outNotes = [];
+outNotes[0]=1000000000;
+outputMelody.forEach(function(note, index){
+  outNotes.push(getHz(note));
+})
+return outNotes;
 }());//IIFE
-
-Tone.Transport.bpm.value = 90;
-Tone.Transport.swing = 0.5;
-
 let loopIndex = 0;
-
+let melodyLength = soundNotes.length;
+// debugger;
 let loop = new Tone.Loop(function(time){
-  let note = soundNotes[loopIndex % soundNotes.length];
+  let note =null;
+  note = soundNotes[loopIndex % melodyLength];
   synth.triggerAttackRelease(note, "8n", time)
   loopIndex++;
 }, "8n")
 
-let melodyLength = soundNotes.length;
 loop.start(0).stop('0:'+melodyLength/2+':0');
 
-// Tone.Transport.start();
-///////////////////////////////// Test Variables //////////////////////////////////
-// console.log ('reached the end of script');
-let testGetNoteNames = getNoteNames([-1,-5,-13], 'sharps');
-let testExponent = 3**2;// should be 9, yes it works
-let testGetHz = getHz(9);
-// debugger;
+$('.target').show();//unhide Palay Notes button
 
-//////////////////////////// Final Return Output //////////////////////////////////
-$('.target').show();
 $('button#playNotes').click(function(event){
-  loopIndex =0;
   event.preventDefault();
+  // debugger;
   Tone.Transport.stop();
   Tone.Transport.start();
+  // debugger;
 } );
+
+//////////////////////////// Final Return Output //////////////////////////////////
+
+// debugger;
+
 return (outNotesSpaces);  
 
-}
-///////////////////////////// Test Run Functions //////////////////////////////////
-function testRun(){
-  let testInput = ['CMaj7','G Major','surround4','up'];
-  BEBOPOBJ(testInput);
-}
+}//end of BEBOPOBJ
