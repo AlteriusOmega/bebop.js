@@ -6,9 +6,10 @@
 
 <style>
 body {
-    background-image: linear-gradient(darkslateblue, rgb(255, 0, 200));
-    color:rgb(100, 192, 223); 
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-image: linear-gradient(rgb(0, 0, 0), rgb(2, 2, 2));
+    color:rgb(255, 255, 255); 
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
     }
 h1 {text-align: center;}
 </style>
@@ -17,16 +18,16 @@ h1 {text-align: center;}
 
 <body>
 
-<h1>Welcome to the bebop lick generator!</h1>
+<h1>.bebop()</h1>
 
 Type a jazz chord into the form below, then input the key, select style and direction, and click "Get Bebop!" <br><br>
 Ex: "EbMaj7" and "D# Major 7th" will both produce the same notes but the first will show the accidentals as flats<br>
 and the second will show them as sharps.<br>
-The generator currently supports: major 7ths, minor 7ths, dominant 7ths, half-diminished 7ths, minor-major 7ths, augmented triads, and major triads.
+
 <br><br>
 <form>
-<input name="bebop  input" type="text" id="bebopIn">Chord (Ex: Db Major 7th, Emin7, Ab minmaj9, F aug)<br>
-<input name="key input" type="text" id="keyIn">Key (Ex: D, A minor, Bb major, Cmin)<br>
+<input name="bebop  input" type="text" id="bebopIn"> Chord | Ex: Db Major 7th, Emin7, Ab minmaj9, F aug<br>
+<input name="key input" type="text" id="keyIn"> Key (Optional) | Ex: D, A minor, Bb major, G#-<br>
 Style:
 <input name="style" type="radio"  id="styleIn0" value="below">Approach from below
 <input name="style" type="radio"  id="styleIn1" value="above">Approach from above
@@ -43,7 +44,11 @@ Direction:
 </form>
 
 <h1 id="output">
-</h1>
+</h1><br>
+
+<div class="target">
+    <button id="playNotes">Play Notes!</button>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/13.3.11/Tone.js"></script>
 <script type="text/javascript" src="bebop.js"></script>
