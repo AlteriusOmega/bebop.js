@@ -18,7 +18,7 @@ const gain = new Tone.Gain(0.9);
 gain.toMaster();
 synth.connect(gain);
 
-Tone.Transport.bpm.value = 90;
+Tone.Transport.bpm.value = 75;
 Tone.Transport.swing = 0.5;
 return synth;
 }
@@ -70,7 +70,7 @@ $('h1#output').html(BEBOPOBJ(chordFromHtml, keyFromHtml, styleFromHtml, directio
   //Check if all inputs arguments are received 
   const baseHz = 261.625565;// This is the Hz value of C4 (middle C), which is represented by 0 in allNotes
   const baseSemitone = 2**(1/12);
-  const baseOctave = 4;//base octave for what 0 represents - if set to 4, 0 = C4
+  const baseOctave = 3;//base octave for what 0 represents - if set to 4, 0 = C4
   const allScales = {
     'major': {'notes': [0,2,4,5,7,9,11], 'mode':0, 'quality':'maj7'},
     'dorian':{'notes':[0,2,3,5,7,9,10],'mode':2, 'quality':'min7'},
@@ -437,9 +437,46 @@ $('h1#output').html(BEBOPOBJ(chordFromHtml, keyFromHtml, styleFromHtml, directio
       return (surround4Notes);
     }());//IIFE
     self.randomMix = (function(){
-      let randomNum = getRandomInt(4);
-      //use switch case and getRandomInt(5) to choose between different methods 
+      let randomMixNotes = [];
+      self.tones.forEach(function(tone, index){
+            let randomNum = getRandomInt(4);
+              //use switch case and getRandomInt(5) to choose between different methods 
+              // debugger;
+            switch( randomNum ) {
+            case 0:
+            randomMixNotes.push(self.belowNote(tone));
+            randomMixNotes.push(tone);
+                break; 
+            case 1:
+            randomMixNotes.push(self.aboveNote(tone) );
+            randomMixNotes.push(tone);            
+                break;
+            case 2:
+            randomMixNotes.push(self.aboveNote(tone) );
+            randomMixNotes.push(self.belowNote(tone) );
+            randomMixNotes.push(tone);
+                break;
+            case 3:
+           randomMixNotes.push(self.aboveNote(tone) );        
+            if( ( self.aboveNote(tone) - tone ) > 1 ) {
+              randomMixNotes.push(tone+1);
+              randomMixNotes.push(tone-1);  
+            }
+            else{
+              randomMixNotes.push(tone-2);
+              randomMixNotes.push(tone-1);
+            }
+            randomMixNotes.push(tone); 
+                break;
+            default:// default to surround 3
+            randomMixNotes.push(self.aboveNote(tone) );
+            randomMixNotes.push(self.belowNote(tone) );
+            randomMixNotes.push(tone);
+                break;
+          }
 
+      });
+    return randomMixNotes;
     } () )//IIFE 
   }
 
@@ -460,8 +497,8 @@ $('.target').show();//unhide Palay Notes button
  if(chordIn == false ){return('Please input a valid chord!')}
 
   let keyIn = KEY ? KEY.toLowerCase().replace(/ /g, '') : false;
-  let styleIn = STYLE ? STYLE.toLowerCase().replace(/ /g, '') : false;
-  let directionIn = DIRECTION ? DIRECTION.toLowerCase().replace(/ /g, '') : false;
+  let styleIn = STYLE ? STYLE : false;
+  let directionIn = DIRECTION ? DIRECTION : false;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -474,27 +511,32 @@ $('.target').show();//unhide Palay Notes button
 
   function getOutputMelody(){//todo change to switch case!
     let notesOut = 0;
-    if(styleIn == 'below'){
-    notesOut = inputMelody.approachBelow;
-    }
-    else if(styleIn == 'above'){
-    notesOut = inputMelody.approachAbove;
-    }
-    else if(styleIn == 'mix'){
-      notesOut = inputMelody.aboveBelow;
-      }
-    else if(styleIn == 'surround3'){
-      notesOut = inputMelody.surround3;
-    }
-    else if(styleIn == 'surround4'){
-      notesOut = inputMelody.surround4;
-    }
-    else{
-      notesOut = inputMelody.aboveBelow;//aboveBelow is default, most common and jazzy sounding
-    }          
+    let style = styleIn;
+    switch(style){
+      case 'below':
+        notesOut = inputMelody.approachBelow;
+        break;
+      case 'above':
+        notesOut = inputMelody.approachAbove;
+        break;
+      case 'mix':
+        notesOut = inputMelody.aboveBelow;
+        break;
+      case 'surround3':
+        notesOut = inputMelody.surround3;
+        break;
+      case 'surround4':
+        notesOut = inputMelody.surround4;
+        break;
+      case 'randomMix':
+        notesOut = inputMelody.randomMix;
+        break;
+      default:
+        notesOut = inputMelody.aboveBelow;
+      }       
     return notesOut;
   }
-
+  // debugger;
   let outputMelody = getOutputMelody();
   let outputMelodyNoteOctave = getNoteOctave(outputMelody, inputMelody.chord.sharpOrFlat);
   let outputNoteNames = getNoteNames(outputMelody, inputMelody.chord.sharpOrFlat);
@@ -508,6 +550,9 @@ $('.target').show();//unhide Palay Notes button
 }
 
   let outNotesSpaces = formatOutput(outputNoteNames);
+  let testRandomMixNotes = inputMelody.randomMix;
+  let testRandomMixNoteNames = getNoteOctave(testRandomMixNotes,inputMelody.chord.sharpOrFlat);
+  // debugger;
 
 ////////////////// Get notes for audio and play using Tone Transport //////////////
 

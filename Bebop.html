@@ -88,7 +88,7 @@ and the second will show them as sharps.<br>
 <b>Key (Optional):</b>
 <input name="key input" type="text" id="keyIn">  | Ex: D, A minor, Bb major, G#-<br>
 <b>Style:</b>
-<input name="style" type="radio"  id="styleIn0"> 
+<input name="style" type="radio"  id="styleIn0" value="below"> 
 <label for="styleIn0" class="radioLabel">Approach from below</label>
 <input name="style" type="radio"  id="styleIn1" value="above">
 <label for="styleIn1" class="radioLabel">Approach from above</label>
@@ -98,6 +98,8 @@ and the second will show them as sharps.<br>
 <label for="styleIn3" class="radioLabel">Surround 3</label>
 <input name="style" type="radio"  id="styleIn4" value="surround4">
 <label for="styleIn4" class="radioLabel">Surround 4</label><br>
+<input name="style" type="radio"  id="styleIn5" value="randomMix">
+<label for="styleIn5" class="radioLabel">RANDOM MIX</label><br>
 <b>Direction:</b>
 <input name="direction" type="radio" id="directionInUp" value="up">
 <label for="directionInUp" class="radioLabel">Up</label> 
@@ -110,7 +112,7 @@ Get Bebop!</button><br>
 </form>
 
 <h1 id="output">
-</h1><br>
+</h1>
 
 <div class="target">
     <button id="playNotes" class="button">
