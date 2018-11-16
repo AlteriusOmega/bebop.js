@@ -18,7 +18,7 @@ const gain = new Tone.Gain(0.9);
 gain.toMaster();
 synth.connect(gain);
 
-Tone.Transport.bpm.value = 75;
+Tone.Transport.bpm.value = 100;
 Tone.Transport.swing = 0.5;
 return synth;
 }
@@ -82,19 +82,27 @@ $('h1#output').html(BEBOPOBJ(chordFromHtml, keyFromHtml, styleFromHtml, directio
     'melodic minor': {'notes': [0,2,3,5,7,9,11]},
     'whole tone': {'notes': [0,2,4,6,8,10]},
     'h diminished': {'notes':[0,1,3,4,6,7,9,10]},
-    'w diminished' : {'notes':[0,2,3,5,6,8,9,11]}
+    'w diminished' : {'notes':[0,2,3,5,6,8,9,11]},
+    'altered': {'notes': [0,1,3,4,6,8,10], 'quality':'alt7'},
+    'lydianDominant': {'notes': [0,2,4,6,7,9,10], 'quality':'dom7#11'}
   };
   const allChords = {
     'aug':{'names':['augmented','aug'], 'tones':[0,4,8], 'scale':'whole tone'},//scale in chords is default if no key is specified (chord assumed to be tonic)
     'min7b5':{'names':['min7b5','minor7b5','-7b5','half'], 'tones':[0,3,6,10,14], 'scale':'locrian'},
-    'minmaj7':{'names': ['minmaj','-maj','minor-major','minormajor'], 'tones':[0,3,7,11,14], 'scale':'melodic minor'},
-    'maj7':{'names':['maj'], 'tones': [0,4,7,11,14,16,18],'scale': 'major'},
+    'minmaj7':{'names': ['minmaj','-maj','minor-major','minormajor'], 'tones':[0,3,7,11,14,17], 'scale':'melodic minor'},
+    'maj7':{'names':['maj'], 'tones': [0,4,7,11,14,18,21],'scale': 'major'},
     'dim7':{'names':['dim','diminished','fully'],'tones':[0,3,6,9], 'scale':'w diminished'},
     'sus2':{'names':['sus2','suspended2'],'tones':[0,2,7],'scale':'major'},
     'sus4':{'names':['sus4','suspended4'],'tones':[0,5,7],'scale':'major'},
     'sus7':{'names':['sus','suspended'],'tones':[0,2,5,7,10],'scale':'mixolydian'},
     'min7': {'names':['min','-','m'], 'tones':[0,3,7,10,14,17,19], 'scale':'minor'},
-    'dom7':{'names':['dom','7','9','11','13'], 'tones':[0,4,7,10,14,16,18], 'scale':'mixolydian'},
+    'alt7':{'names':['alt','altered'], 'tones':[0,4,8,10,13,15,18], 'scale':'altered'},
+    'dom7b9#9':{'names':['domb9#9','b9#9','#9b9'], 'tones':[0,4,7,10,13,15,18,21], 'scale':'h diminished'},
+    'dom7#5#11':{'names':['dom#5#11','#5#11','#11#5','b13#11','#11b13'], 'tones':[0,4,8,10,14,18,20], 'scale':'whole tone'},    
+    'dom7b9':{'names':['domb9','b9'], 'tones':[0,4,7,10,13,18,21], 'scale':'mixolydian'},
+    'dom7#9':{'names':['dom#9','#9'], 'tones':[0,4,7,10,15,18,21], 'scale':'mixolydian'},
+    'dom7#11':{'names':['dom#11','#11'], 'tones':[0,4,7,10,14,18,21], 'scale':'lydianDominant'},
+    'dom7':{'names':['dom','7','9','11','13'], 'tones':[0,4,7,10,14,18,21], 'scale':'mixolydian'},
     'maj':{'names':['', ' '], 'tones':[0,4,7], 'scale':'major'}//just a major triad in case there is no quality in input ex "Gb" will use Gb major triad MUST BE AT BOTTOM OF LIST
   };
 
